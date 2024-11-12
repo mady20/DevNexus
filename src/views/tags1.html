@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/your-font-awesome-key.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-800">
+  <div class="flex flex-col w-full p-5" id="main-content-tags">
+    <header class="mb-8 p-5">
+      <div class="flex flex-wrap justify-between items-center gap-4">
+        <div class="flex space-x-4" id="tag-buttons">
+          <button
+            class="nav-btn bg-green-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 active">
+            All Tags
+          </button>
+          <button
+            class="nav-btn bg-blue-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Following Tags
+          </button>
+          <button
+            class="nav-btn bg-gray-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+            Hidden Tags
+          </button>
+        </div>
+        <div class="relative">
+          <input type="text" id="searchBox"
+            class="shadow-md w-64 text-sm px-4 py-3 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+            placeholder="Search for tag" />
+          <i class="fas fa-search absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+    </header>
+    <main id="tagContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+      <!-- Tag cards will be dynamically inserted here -->
+    </main>
+  </div>
+
+  <script>
+    // Sample tag data
+    const tagData = [
+      { name: 'python', description: 'Everything Python: from beginner tutorials to advanced topics and latest updates.', followers: 980000, posts: 3200 },
+      { name: 'webdev', description: 'Crafting innovative solutions through web development magic Webdev with html,css,js', followers: 980000, posts: 3200 },
+      { name: 'JavaScript', description: 'Empowering interactivity and functionality with JavaScript', followers: 980000, posts: 3200 }
+    ];
+
+    // Get the tag buttons
+    const tagButtons = document.querySelectorAll('#tag-buttons button');
+
+    // Get the tag container
+    const tagContainer = document.getElementById('tagContainer');
+
+    // Initialize the tag display
+    displayTags(tagData);
+
+    // Add click event listeners to the tag buttons
+    tagButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Toggle the active class on the clicked button
+        tagButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Filter the tags based on the clicked button
+        if (button.textContent === 'All Tags') {
+          displayTags(tagData);
+        } else if (button.textContent === 'Following Tags') {
+          displayFollowingTags(tagData);
+        } else if (button.textContent === 'Hidden Tags') {
+          displayHiddenTags(tagData);
+        }
+      });
+    });
+
+    // Get the search input
+    const searchInput = document.getElementById('searchBox');
+
+    // Add input event listener to the search input
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      filterTagsBySearch(tagData, searchTerm);
+    });
+
+    // Functions to handle tag display
+    function displayTags(tags) {
+      // Clear the tag container
+      tagContainer.innerHTML = '';
+
+      // Create and append the tag cards
+      tags.forEach(tag => {
+        const tagCard = createTagCard(tag);
+        tagContainer.appendChild(tagCard);
+      });
+    }
+
+    function displayFollowingTags(tags) {
+      // Filter the tags and display the following tags
+      const followingTags = tags.filter(tag => tag.isFollowing);
+      displayTags(followingTags);
+    }
+
+    function displayHiddenTags(tags) {
+      // Filter the tags and display the hidden tags
+      const hiddenTags = tags.filter(tag => tag.isHidden);
+      displayTags(hiddenTags);
+    }
+
+    function filterTagsBySearch(tags, searchTerm) {
+      // Filter the tags based on the search term
+      const filteredTags = tags.filter(tag => tag.name.toLowerCase().includes(searchTerm));
+      displayTags(filteredTags);
+    }
+
+    function createTagCard(tag) {
+      // Create the tag card element
+      const tagCard = document.createElement('div');
+      tagCard.classList.add('tag-card', 'bg-white', 'dark:bg-gray-800', 'rounded-xl', 'shadow-md', 'overflow-hidden', 'flex', 'flex-col', 'justify-between');
+
+      // Create the tag content
+      const tagContent = document.createElement('div');
+      tagContent.classList.add('p-6');
+
+      const tagLink = document.createElement('a');
+      tagLink.classList.add('text-2xl', 'font-bold', `text-${tag.color}-800`, 'dark:text-${tag.color}-200', 'transition', 'duration-300');
+      tagLink.textContent = `#${tag.name}`;
+
+      const tagDescription = document.createElement('p');
+      tagDescription.classList.add('text-gray-600', 'dark:text-gray-300', 'mt-2');
+      tagDescription.textContent = tag.description;
+
+      tagContent.appendChild(tagLink);
+      tagContent.appendChild(tagDescription);
+
+      // Create the tag actions
+      const tagActions = document.createElement('div');
+      tagActions.classList.add('px-6', 'py-4', 'flex', 'space-x-2');
+
+      const followButton = createButton('Follow', 'bg-green-500', 'text-white');
+      const hideButton = createButton('Hide', 'bg-gray-300', 'text-gray-700');
+
+      tagActions.appendChild(followButton);
+      tagActions.appendChild(hideButton);
+
+      // Create the tag stats
+      const tagStats = document.createElement('div');
+      tagStats.classList.add('px-6', 'py-4', 'bg-gray-50', 'dark:bg-gray-700', 'text-gray-600', 'dark:text-gray-300');
+
+      const followersSpan = document.createElement('span');
+      followersSpan.classList.add('text-sm');
+      followersSpan.textContent = `${tag.followers.toLocaleString()} followers • ${tag.posts.toLocaleString()} posts this week`;
+
+      tagStats.appendChild(followersSpan);
+
+      // Append the content, actions, and stats to the tag card
+      tagCard.appendChild(tagContent);
+      tagCard.appendChild(tagActions);
+      tagCard.appendChild(tagStats);
+
+      return tagCard;
+    }
+
+  </script>
+</body>
+</html>

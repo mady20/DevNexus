@@ -1,0 +1,98 @@
+<div class="flex-col w-full p-5" id="main-content-tags">
+    <header class="mb-8 p-5">
+        <div class="flex flex-wrap justify-between items-center gap-4">
+            <div class="flex space-x-4">
+                <button
+                    class="nav-btn bg-green-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    All Tags
+                </button>
+                <button
+                    class="nav-btn bg-blue-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Following Tags
+                </button>
+                <button
+                    class="nav-btn bg-gray-500 text-white font-bold text-sm px-6 py-3 rounded-lg transition duration-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                    Hidden Tags
+                </button>
+            </div>
+            <div class="relative">
+                <input type="text" id="searchBox"
+                    class=" shadow-md w-64 text-sm px-4 py-3 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 "  
+                    placeholder="Search for tag" />
+                <i class="fas fa-search absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+    </header>
+    <main id="tagContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+
+        <div class="tag-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex flex-col justify-between">
+            <div class="p-6">
+                <a href="#"
+                    class="text-2xl font-bold text-green-800 dark:text-green-200 transition duration-300">#python</a>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                    Everything Python: from beginner tutorials to advanced
+                    topics and latest updates.
+                </p>
+            </div>
+            <div class="px-6 py-4  flex space-x-2">
+                <button
+                    class="fb bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    Follow
+                </button>
+                <button
+                    class="fb bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Hide
+                </button>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <span class="text-sm">980K followers • 3.2K posts this week</span>
+            </div>
+        </div>
+        <div class="tag-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex flex-col justify-between">
+            <div class="p-6">
+                <a href="#"
+                    class="text-2xl font-bold text-green-800 dark:text-green-200 transition duration-300">#webdev</a>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                    Crafting innovative solutions through web development magic Webdev with html,css,js
+                </p>
+            </div>
+            <div class=" px-6 py-4  flex space-x-2">
+                <button
+                    class="fb bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    Follow
+                </button>
+                <button
+                    class="fb bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Hide
+                </button>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <span class="text-sm">980K followers • 3.2K posts this week</span>
+            </div>
+        </div>
+        <div class="tag-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex flex-col justify-between">
+            <div class="p-6">
+                <a href="#"
+                    class="text-2xl font-bold text-blue-800 dark:text-blue-200 transition duration-300">#JavaScript</a>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                    Empowering interactivity and functionality with JavaScript
+                </p>
+                
+            </div>
+            <div class=" px-6 py-4  flex space-x-2">    
+                <button
+                    class="fb bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    Follow
+                </button>
+                <button
+                    class="fb bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                    Hide
+                </button>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <span class="text-sm">980K followers • 3.2K posts this week</span>
+            </div>
+        </div>
+
+    </main>
+</div>

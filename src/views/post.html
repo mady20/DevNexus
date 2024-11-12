@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Blog Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#1b1b1f",
+                        sidebar: "#161618",
+                        card: "#0a0a0a",
+                        text: "#ccc",
+                        muted: "#888",
+                        hover: "#333",
+                        limeAccent: "cyan",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        /* Styles for the h2 element with animated underline */
+        .unAnimate {
+            position: relative;
+            /* For the positioning of the underline */
+            display: inline-block;
+            /* Needed for the underline to cover the text */
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: inherit;
+            /* Inherit text color */
+            text-decoration: none;
+            /* Remove default underline */
+        }
+
+        .unAnimate::after {
+            content: '';
+            /* Create an empty pseudo-element */
+            position: absolute;
+            /* Position it relative to the h2 */
+            left: 0;
+            /* Align to left */
+            bottom: -2px;
+            /* Position just below the text */
+            height: 2px;
+            /* Underline thickness */
+            width: 100%;
+            /* Full width of the h2 */
+            background: linear-gradient(to right, rgba(255, 0, 0, 1), rgba(255, 0, 180, 1), rgba(0, 100, 200, 1));
+            transform: scaleX(0);
+            /* Initially hidden */
+            transition: transform 0.4s ease;
+            /* Smooth transition */
+        }
+
+        .unAnimate:hover::after,
+        .unAnimate:focus::after {
+            transform: scaleX(1);
+            /* Scale to full width on hover */
+        }
+
+        /* Additional styles */
+        #blogPost {
+            text-decoration-color: #1B1B1E;
+            /* Initial underline color */
+            text-decoration-thickness: 1px;
+            /* Thickness of the underline */
+        }
+
+        .line-hover {
+            text-decoration: underline;
+            text-decoration-color: rgb(0, 213, 255);
+            /* Change underline color on hover */
+        }
+
+        #commentList {
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* textarea {
+    width: 350px;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: black;
+} */
+        #popup {
+            display: none;
+            font-size: larger;
+            position: fixed;
+            left: 70%;
+            top: 3%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 5px;
+            width: 350px;
+            height: 140px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* #popup button {
+            margin-top: 40px;
+            background-color: cyan;
+            border-radius: 4px;
+            color: black;
+            padding: 5px 10px;
+        } */
+
+        #popup button:hover {
+            background-color: #2ddbeb;
+        }
+
+        #submitComment:hover {
+            background-color: #2ddbeb;
+        }
+
+        .follow {
+            background-color: cyan;
+            color: white;
+        }
+
+        .following {
+            background-color: #2ddbeb;
+            color: white;
+        }
+
+        .popup.blow-up {
+            display: block;
+            animation: blowUp 0.5s forwards;
+            /* Trigger the blow-up animation */
+        }
+
+        @keyframes blowUp {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-bg text-text">
+    <div class="main-wrapper">
+        <!-- top bar -->
+        <header class="w-full h-16 flex items-center pl-5 pr-5 justify-between bg-sidebar shadow-lg">
+            <nav class="hidden xl:flex lg:flex items-center">
+                <a href="index.html">
+                    <span class="text-lg font-semibold" id="path">Home</span>
+                </a>
+            </nav>
+            <nav class="lg:hidden xl:hidden flex flex-1 justify-between items-center">
+                <button id="menu-toggle" class="z-55 text-2xl">☰</button>
+                <h1 class="text-xl font-bold text-limeAccent">DevNexus</h1>
+                <div class="flex justify-between items-center gap-2">
+                    <i class="fas fa-user-circle text-2xl"></i>
+                </div>
+            </nav>
+
+            <div class="items-center gap-4 lg:flex xl:flex hidden">
+                <!-- search bar -->
+                <div id="search" class="max-w-sm border flex rounded-2xl p-2 items-center bg-card">
+                    <i class="fas fa-search fa-fw"></i>
+                    <input class="ml-2 bg-card h-full w-full outline-none" type="search" aria-label="search"
+                        autocomplete="off" placeholder="Search..." onkeypress="showSearch()" />
+                </div>
+                <button id="createPostBtn"
+                    class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-md font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white">
+                    Create Post
+                </button>
+                <i class="fas fa-bell text-xl"></i>
+                <a href="profile.html" class="lg:hidden xl:hidden"><i class="fas fa-user-circle text-xl"></i></a>
+            </div>
+        </header>
+
+        <div class="flex mt-8">
+            <!-- main content post -->
+            <main class="flex h-full w-full justify-center text-white p-5 gap-3">
+                <div
+                    class="reactions-bar lg:flex xl:flex hidden flex-col items-center justify-start w-14 space-y-1 text-lg text-limeAccent">
+                    <div
+                        class="like-section flex flex-col p-2 items-center rounded-full transition duration-200 ease-in-out hover:bg-muted ">
+                        <button
+                            class="hover:text-hover transition-transform duration-200 transform active:scale-150 text-2xl "
+                            onclick="increaseLike()">👍</button>
+                        <div id="likeCount" class="text-cyan-50 text-sm font-medium">0</div>
+                    </div>
+
+                    <div
+                        class="like-section flex flex-col p-2 items-center rounded-full transition duration-200 ease-in-out hover:bg-muted ">
+                        <button
+                            class="hover:text-hover transition-transform duration-200 transform active:scale-150 text-2xl"
+                            id="scrollToComment">💬</button>
+                        <div id="CommentCount" class="text-cyan-50 text-sm font-medium">0</div>
+                    </div>
+                    <div
+                        class="like-section flex flex-col p-2 items-center rounded-full transition duration-200 ease-in-out hover:bg-muted ">
+                        <button id="copyButton"
+                            class="hover:text-hover transition-transform duration-200 transform active:scale-150 text-2xl mt-2"
+                            onclick="copyURL()">
+                            🔗
+                        </button>
+                    </div>
+                </div>
+                <script> let likeCount = 0;
+
+                    function increaseLike() {
+                        likeCount++;
+                        document.getElementById('likeCount').innerText = likeCount;
+                    }
+
+                    let CommentCount = 0;
+                    function increaseComment() {
+                        CommentCount++;
+                        document.getElementById('CommentCount').innerText = CommentCount;
+                    }
+
+                    function copyURL() {
+                        // Get the current URL of the website
+                        const url = window.location.href;
+
+                        // Create a temporary input element to hold the URL
+                        const tempInput = document.createElement("input");
+                        tempInput.value = url;
+                        document.body.appendChild(tempInput);
+
+                        // Select the input's content and copy it to the clipboard
+                        tempInput.select();
+                        document.execCommand("copy");
+
+                        // Remove the temporary input element
+                        document.body.removeChild(tempInput);
+
+                        const popup = document.getElementById('popup');
+                        popup.style.display = 'block';
+                        document.getElementById('popupMessage').innerText = "URL copied successfully!";
+                        popup.classList.add('blow-up');
+
+                        setTimeout(() => {
+                            popup.style.animation = 'fadeOut 1s forwards';
+                            setTimeout(() => {
+                                popup.classList.remove('blow-up');
+                                popup.style.animation = '';
+                                popup.style.display = 'none';
+                            }, 1000);
+                        }, 2000);
+                    };
+
+                    // Close the popup when the button is clicked
+                    document.getElementById('closePopup').addEventListener('click', function () {
+                        popup.style.display = 'none';
+                        popup.classList.remove('blow-up');
+                    });
+
+
+                </script>
+
+
+                <div id="post" class="lg:w-1/2 p-5 bg-card rounded-lg shadow-lg w-full">
+                    <h2 class="unAnimate">
+                        5 Critical Mistakes to Avoid When Starting a New React Project in 2024: A Beginner Guide 🚀
+                    </h2>
+
+                    <div class="tags mb-4">
+                        <ul class="flex space-x-2">
+                            <li
+                                class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white">
+                                #python
+                            </li>
+                            <li
+                                class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white">
+                                #html
+                            </li>
+                            <li
+                                class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white">
+                                #css
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                    <div class="content leading-relaxed text-muted mb-8">
+                        <p id="blogPost">
+                            <span>Skipping TypeScript: Start with TypeScript to catch errors early and improve code
+                                quality.</span><br>
+                            <span>Ignoring File Structure: Organize your project files early on, as a messy structure
+                                will slow you down in the long run.</span><br>
+                            <span>Neglecting Component Reusability: Create reusable components to avoid duplicating code
+                                and simplify maintenance.</span><br>
+                            <span>Overcomplicating State Management: Start with React's built-in state before jumping to
+                                Redux or other libraries.</span><br>
+                            <span>Not Using Git: Always use version control from day one for collaboration and
+                                backup.</span><br>
+                            <span>Not Learning React Hooks Properly: Master basic hooks like useState and useEffect
+                                before diving into advanced ones.</span><br>
+                            <span>Skipping TypeScript: Start with TypeScript to catch errors early and improve code
+                                quality.</span><br>
+                            <span>Ignoring File Structure: Organize your project files early on, as a messy structure
+                                will slow you down in the long run.</span><br>
+                            <span>Neglecting Component Reusability: Create reusable components to avoid duplicating code
+                                and simplify maintenance.</span><br>
+                            <span>Overcomplicating State Management: Start with React's built-in state before jumping to
+                                Redux or other libraries.</span><br>
+                            <span>Not Using Git: Always use version control from day one for collaboration and
+                                backup.</span><br>
+                            <span>Not Learning React Hooks Properly: Master basic hooks like useState and useEffect
+                                before diving into advanced ones.</span><br>
+                            <span>Skipping TypeScript: Start with TypeScript to catch errors early and improve code
+                                quality.</span><br>
+                            <span>Ignoring File Structure: Organize your project files early on, as a messy structure
+                                will slow you down in the long run.</span><br>
+                            <span>Neglecting Component Reusability: Create reusable components to avoid duplicating code
+                                and simplify maintenance.</span><br>
+                            <span>Overcomplicating State Management: Start with React's built-in state before jumping to
+                                Redux or other libraries.</span><br>
+                            <span>Not Using Git: Always use version control from day one for collaboration and
+                                backup.</span><br>
+                            <span>Not Learning React Hooks Properly: Master basic hooks like useState and useEffect
+                                before diving into advanced ones.</span><br>
+                        </p>
+                    </div>
+
+                    <div class="comments border-t border-muted pt-4">
+
+                        <div class="flex mt-5 gap-4 flex-col ">
+                            <div class="flex gap-3">
+                                <div class="flex flex-col items-end w-10">
+                                    <i class="fas fa-user border p-3 rounded-3xl"></i>
+                                </div>
+                                <div>
+                                    <div class="comment-section ">
+                                        <h2 class="unAnimate" id="targetSection">Add a Comment</h2>
+                                        <textarea
+                                            class="w-full h-20 p-3 bg-card text-white outline-none border  rounded resize-none"
+                                            id="commentInput" placeholder="Write your comment here"></textarea>
+                                    </div>
+                                    <button id="submitComment"
+                                        class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-md font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-sidebar" id="commentList">
+                                <h2 class="unAnimate">Comments:</h2>
+                                <ul id="comments"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden flex-col w-1/4 space-y-6 lg:flex xl:flex ">
+                    <div class="author-info p-4 bg-card rounded-lg shadow-lg text-white">
+                        <h2 class="unAnimate">Author Name</h2>
+                        <p class="text-muted mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <button
+                            class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-4 py-2 rounded-xl text-md font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white"
+                            id="toggleButton">Follow</button>
+                    </div>
+                    <div class="more-posts p-4 bg-card rounded-lg shadow-lg">
+                        <h1 class="unAnimate">More from author</h1>
+                        <div class="flex flex-col space-y-2">
+                            <article class="border-b border-muted pb-4">
+                                <h2 class="text-lg font-medium text-white">10 CSS Code Snippets Every UI Developer
+                                    Should Know</h2>
+                                <div class="tags mt-2">
+                                    <ul class="flex space-x-2 flex-wrap">
+                                        <li class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-3 py-1 rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white"">
+                                            #python</li>
+                                        <li class=" bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-3 py-1
+                                            rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r
+                                            hover:from-cyan-500 hover:to-teal-500 hover:text-white transition
+                                            duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600
+                                            active:to-teal-600 active:text-white"">
+                                            #html</li>
+                                        <li class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black px-3 py-1 rounded-xl text-sm font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white"">
+                                            #css</li>
+                                    </ul>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <!-- Popup -->
+    <div id=" popup" class="bg-sidebar popup">
+
+                                            <p id="popupMessage"></p>
+                                            <button
+                                                class="bg-gradient-to-r from-limeAccent to-cyan-600 text-black mt-9 px-3 py-1 rounded-xl text-md font-medium shadow-md hover:bg-gradient-to-r hover:from-cyan-500 hover:to-teal-500 hover:text-white transition duration-300 ease-in-out active:bg-gradient-to-r active:from-cyan-600 active:to-teal-600 active:text-white"
+                                                id="closePopup">Close</button>
+                                </div>
+
+                                <script>
+                                    const lines = document.querySelectorAll('#blogPost span');
+
+                                    lines.forEach((line, index) => {
+                                        line.addEventListener('mouseenter', () => {
+                                            console.log(`Mouse entered line ${index}`);
+                                            // Add the hover class to the current line and the next 2 lines
+                                            for (let i = index; i < Math.min(index + 2, lines.length); i++) {
+                                                lines[i].classList.add('line-hover');
+                                            }
+                                        });
+
+                                        line.addEventListener('mouseleave', () => {
+                                            console.log(`Mouse left line ${index}`);
+                                            // Remove the hover class from the current line and the next 2 lines
+                                            for (let i = index; i < Math.min(index + 3, lines.length); i++) {
+                                                lines[i].classList.remove('line-hover');
+                                            }
+                                        });
+                                    });
+
+
+                                    document.getElementById('submitComment').addEventListener('click', function () {
+                                        // Get the comment input
+                                        const commentText = document.getElementById('commentInput').value;
+
+                                        // Validate input
+                                        if (commentText === '') {
+                                            alert("Comment cannot be empty!");
+                                            return;
+                                        }
+                                        else {
+                                            document.getElementById('submitComment').addEventListener('click', increaseComment());
+                                        }
+
+                                        // Add the comment to the list
+                                        const commentList = document.getElementById('comments');
+                                        const newComment = document.createElement('li');
+                                        newComment.classList.add('bg-card', 'p-4', 'rounded-lg', 'mt-4', 'flex-col', 'break-normal', 'items-start', 'space-x-3', 'border', 'border-muted', 'shadow-lg', 'transition', 'duration-200', 'hover:shadow-xl');
+                                        const userIcon = '<i class="fas fa-user border p-3 rounded-3xl"></i>'; // Change icon as needed
+                                        const username = 'Username'; // Change to dynamic username if needed
+                                        // newComment.textContent = commentText;
+                                        newComment.innerHTML = `<div class="flex-shrink-0">
+            ${userIcon}
+            <span class="text-limeAccent ml-1 font-bold">${username}:</span>
+        </div>
+        <div>
+            <span class="text-white ml-8">${commentText}</span>
+        </div>
+    `;
+
+                                        commentList.appendChild(newComment);
+
+                                        // Clear the input field
+                                        document.getElementById('commentInput').value = '';
+
+                                        // Show the popup
+                                        const popup = document.getElementById('popup');
+                                        popup.style.display = 'block';
+                                        document.getElementById('popupMessage').innerText = "Comment added successfully!";
+                                        popup.classList.add('blow-up');
+
+                                        setTimeout(() => {
+                                            popup.style.animation = 'fadeOut 1s forwards';
+                                            setTimeout(() => {
+                                                popup.classList.remove('blow-up');
+                                                popup.style.animation = '';
+                                                popup.style.display = 'none';
+                                            }, 1000);
+                                        }, 2000);
+                                    });
+
+                                    // Close the popup when the button is clicked
+                                    document.getElementById('closePopup').addEventListener('click', function () {
+                                        popup.style.display = 'none';
+                                        popup.classList.remove('blow-up');
+                                    });
+
+
+                                    const toggleButton = document.getElementById("toggleButton");
+
+                                    toggleButton.addEventListener("click", function () {
+                                        if (toggleButton.innerText === "Follow") {
+                                            toggleButton.innerText = "Following";
+                                            toggleButton.classList.remove("follow");
+                                            toggleButton.classList.add("following");
+                                        } else {
+                                            toggleButton.innerText = "Follow";
+                                            toggleButton.classList.remove("following");
+                                            toggleButton.classList.add("follow");
+                                        }
+                                    });
+
+
+
+                                </script>
+                                <script>
+                                    document.getElementById('scrollToComment').addEventListener('click', function () {
+                                        const target = document.getElementById('targetSection');
+                                        target.scrollIntoView({ behavior: 'smooth' });
+                                    });
+                                </script>
+
+
+</body>
+
+</html>

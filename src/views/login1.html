@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevNexus Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div style="display: flex;">
+        <div class="left" style="width: 50%;">
+            <div class="container">
+                <div class="card blue-card">
+                  <div class="card-header">
+                      <div class="date" id="current-date">JUNE<span>29</span></div>
+                  </div>
+                  <div class="card-content">
+                      <h2>DevNexus</h2>
+                      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas cumque quae eius cupiditate? Expedita, vitae quas dolor nam nulla iure rem, corporis earum ipsum fuga delectus ea velit similique hic. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aperiam quisquam perspiciatis officia amet </p>
+                      <a href="#" class="see-more">SEE MORE</a>
+                  </div>
+              </div>
+            </div>
+        </div>      
+        <div class="right" style="width: 50%;">
+            <!-- Login Form -->
+            <div class="box" id="login-box">
+                <span class="borderLine"></span>
+                <form>
+                    <h1 class="gradient-text">DevNexus Login</h1>
+                    <div class="inputBox">                                                    
+                        <input type="text" required="required">
+                        <span>Username/Email</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" required="required">
+                        <span>Password</span>
+                        <i></i>
+                    </div>
+                    <br>
+                    <div class="rememberMe">
+                        <label>Remember Me</label>
+                        <input type="checkbox" required>
+                    </div>
+                    <div>
+                        <input type="submit" value="Login">
+                    </div>
+                    <div class="links">
+                        <a href="#" id="forgot-password">Forgot Password?</a>
+                        <a href="#" id="create-account">Create Account</a> 
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div class="box" id="forgot-box" style="display: none; height:450px;">
+                <span class="borderLine"></span>
+                <form id="forgotPasswordForm">
+                    <h1 class="gradient-text">Forgot Password</h1>
+                    <div class="inputBox">
+                        <input type="text" required="required" name="username">
+                        <span>Username/Email</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" required="required" name="newPassword">
+                        <span>Create New Password</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" required="required" name="confirmPassword">
+                        <span>Confirm Password</span>
+                        <i></i>
+                    </div><br>
+                    <input type="submit" value="Reset Password">
+                    <div class="links">
+                        <a href="#" id="back-to-login">Back to Login</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box" id="create-box" style="display: none; height: 570px;">
+                <span class="borderLine"></span>
+                <form id="createAccountForm">
+                    <h1 class="gradient-text">Create DevNexus Account</h1>
+                    <div class="inputBox">
+                        <input type="text" required="required" name="username">
+                        <span>Username</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="email" required="required" name="email">
+                        <span>Email</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" required="required" name="password">
+                        <span>Create Password</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" required="required" name="confirmPassword">
+                        <span>Confirm Password</span>
+                        <i></i>
+                    </div><br>
+                    <input type="submit" value="Create Account">
+                    <div class="links">
+                        <a href="#" id="back-to-login-from-create">Back to Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Set the initial form to be displayed
+        document.getElementById('login-box').style.display = 'block';
+        document.getElementById('forgot-box').style.display = 'none';
+        document.getElementById('create-box').style.display = 'none';
+
+        // Show the forgot password form
+        document.getElementById('forgot-password').onclick = function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('forgot-box').style.display = 'block';
+            document.getElementById('create-box').style.display = 'none';
+        };
+
+        // Show the create account form
+        document.getElementById('create-account').onclick = function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('forgot-box').style.display = 'none';
+            document.getElementById('create-box').style.display = 'block';
+        };
+
+        // Back to login from forgot password
+        document.getElementById('back-to-login').onclick = function(event) {
+            event.preventDefault();
+            document.getElementById('login-box').style.display = 'block';
+            document.getElementById('forgot-box').style.display = 'none';
+            document.getElementById('create-box').style.display = 'none';
+        };
+
+        // Back to login from create account
+        document.getElementById('back-to-login-from-create').onclick = function(event) {
+            event.preventDefault();
+            document.getElementById('login-box').style.display = 'block';
+            document.getElementById('forgot-box').style.display = 'none';
+            document.getElementById('create-box').style.display = 'none';
+        };
+
+        // Set the current date
+        const dateElement = document.getElementById('current-date');
+        const currentDate = new Date();
+        const options = { month: 'long', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('en-US', options).toUpperCase();
+        const [month, day] = formattedDate.split(' ');
+        dateElement.innerHTML = ${month}<span>${day}</span>;
+    </script>
+    
+</body>
+</html>

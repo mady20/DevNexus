@@ -1,0 +1,122 @@
+    /* Styles for the h2 element with animated underline */
+    .unAnimate {
+        position: relative;
+        /* For the positioning of the underline */
+        display: inline-block;
+        /* Needed for the underline to cover the text */
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: inherit;
+        /* Inherit text color */
+        text-decoration: none;
+        /* Remove default underline */
+    }
+
+    .unAnimate::after {
+        content: '';
+        /* Create an empty pseudo-element */
+        position: absolute;
+        /* Position it relative to the h2 */
+        left: 0;
+        /* Align to left */
+        bottom: -2px;
+        /* Position just below the text */
+        height: 2px;
+        /* Underline thickness */
+        width: 100%;
+        /* Full width of the h2 */
+        background: linear-gradient(to right, rgba(255, 0, 0, 1), rgba(255, 0, 180, 1), rgba(0, 100, 200, 1));
+        transform: scaleX(0);
+        /* Initially hidden */
+        transition: transform 0.4s ease;
+        /* Smooth transition */
+    }
+
+    .unAnimate:hover::after,
+    .unAnimate:focus::after {
+        transform: scaleX(1);
+        /* Scale to full width on hover */
+    }
+
+    /* Additional styles */
+    #blogPost {
+        text-decoration-color: #1B1B1E;
+        /* Initial underline color */
+        text-decoration-thickness: 1px;
+        /* Thickness of the underline */
+    }
+
+    .line-hover {
+        text-decoration: underline;
+        text-decoration-color: rgb(0, 213, 255);
+        /* Change underline color on hover */
+    }
+
+    #commentList {
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #popup {
+        display: none;
+        font-size: larger;
+        position: fixed;
+        left: 70%;
+        top: 3%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 5px;
+        width: 350px;
+        height: 140px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+
+    #popup button:hover {
+        background-color: #2ddbeb;
+    }
+
+    #submitComment:hover {
+        background-color: #2ddbeb;
+    }
+
+    .follow {
+        background-color: cyan;
+        color: white;
+    }
+
+    .following {
+        background-color: #2ddbeb;
+        color: white;
+    }
+
+    .popup.blow-up {
+        display: block;
+        animation: blowUp 0.5s forwards;
+        /* Trigger the blow-up animation */
+    }
+
+    @keyframes blowUp {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(1);
+        }
+    }
