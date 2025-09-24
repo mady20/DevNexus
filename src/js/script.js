@@ -37,7 +37,7 @@ closeSidebarBtn.addEventListener('click', () => {
 
 // using fetch api to load different pages asynchronously
 function showHome() {
-    fetch("/dn/src/views/home.html")
+    fetch("./src/views/home.html")
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok" + response.statusText);
